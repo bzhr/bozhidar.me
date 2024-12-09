@@ -1,0 +1,101 @@
+---
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/700.css';
+import Header from '../components/Header.astro';
+
+interface Props {
+	title: string;
+	description?: string;
+}
+
+const { title, description = "Bozhidar's personal blog and thoughts" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content={description} />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<slot />
+		</main>
+		<footer>
+			<p>&copy; {new Date().getFullYear()} Bozhidar. All rights reserved.</p>
+		</footer>
+	</body>
+</html>
+<style is:global>
+	:root {
+		--text-primary: #1a1a1a;
+		--text-secondary: #4a4a4a;
+		--background: #ffffff;
+		--accent: #3b82f6;
+		--code-bg: #f6f8fa;
+		--border-color: #eaeaea;
+	}
+
+	[data-theme="dark"] {
+		--text-primary: #e1e1e1;
+		--text-secondary: #a1a1a1;
+		--background: #1a1a1a;
+		--accent: #60a5fa;
+		--code-bg: #2d2d2d;
+		--border-color: #2d2d2d;
+	}
+
+	html {
+		font-family: 'Inter', system-ui, sans-serif;
+		background: var(--background);
+		color: var(--text-primary);
+	}
+
+	body {
+		max-width: 45rem;
+		margin: 0 auto;
+		padding: 2rem 1rem;
+		line-height: 1.7;
+	}
+
+	main {
+		margin: 2rem 0;
+	}
+
+	h1, h2, h3, h4, h5, h6 {
+		line-height: 1.2;
+		margin: 2rem 0 1rem;
+	}
+
+	footer {
+		margin-top: 4rem;
+		padding-top: 2rem;
+		border-top: 1px solid var(--border-color);
+		text-align: center;
+		color: var(--text-secondary);
+		font-size: 0.9rem;
+	}
+
+	/* Update code block styles for dark mode */
+	pre {
+		background: var(--code-bg) !important;
+	}
+
+	code {
+		background: var(--code-bg) !important;
+	}
+
+	/* Smooth transitions for theme switching */
+	html {
+		transition: background-color 0.2s ease;
+	}
+
+	body {
+		transition: color 0.2s ease;
+	}
+</style>

@@ -1,0 +1,49 @@
+---
+interface Props {
+	title: string;
+	description: string;
+	pubDate: Date;
+	url: string;
+}
+
+const { title, description, pubDate, url } = Astro.props;
+const formattedDate = pubDate.toLocaleDateString('en-US', {
+	year: 'numeric',
+	month: 'long',
+	day: 'numeric'
+});
+---
+
+<article class="post-preview">
+	<header>
+		<time datetime={pubDate.toISOString()}>{formattedDate}</time>
+		<h2><a href={url}>{title}</a></h2>
+	</header>
+	<p>{description}</p>
+	<a href={url} class="read-more">Read more →</a>
+</article>
+
+<style>
+	.post-preview {
+		margin-bottom: 2.5rem;
+	}
+	time {
+		color: var(--text-secondary);
+		font-size: 0.9rem;
+	}
+	h2 {
+		margin: 0.5rem 0;
+	}
+	h2 a {
+		color: var(--text-primary);
+		text-decoration: none;
+	}
+	h2 a:hover {
+		color: var(--accent);
+	}
+	.read-more {
+		color: var(--accent);
+		text-decoration: none;
+		font-weight: 500;
+	}
+</style>
