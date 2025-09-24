@@ -25,6 +25,7 @@ const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
   description={post.data.description}
   keywords={post.data.tags}
   type="article"
+  image={post.data.image}
 >
 	<article class="blog-post">
 		<header>
@@ -38,6 +39,17 @@ const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
 				</div>
 			)}
 		</header>
+		{post.data.image && (
+			<figure class="post-hero">
+				<img
+					src={post.data.image}
+					alt={post.data.imageAlt ?? post.data.title}
+					loading="lazy"
+					decoding="async"
+					sizes="(max-width: 720px) 100vw, 720px"
+				/>
+			</figure>
+		)}
 		<Content />
 	</article>
 </Layout>
@@ -64,6 +76,22 @@ const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
 	.tag {
 		color: var(--text-secondary);
 		font-size: 0.9rem;
+	}
+	.post-hero {
+		margin: 1rem 0 1.5rem;
+		overflow: hidden;
+	}
+	.post-hero img {
+		display: block;
+		width: 100%;
+		height: auto;
+		/* Keep images visually balanced and not too tall */
+		aspect-ratio: 16 / 9;
+		max-height: 420px;
+		object-fit: cover;
+		object-position: center;
+		border-radius: 8px;
+		box-shadow: 0 2px 10px rgba(0,0,0,0.08);
 	}
 	article :global(h2) {
 		font-size: 1.8rem;

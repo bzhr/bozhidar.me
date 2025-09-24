@@ -3,15 +3,15 @@ title: "ElectricSQL for Multi Tenant Apps"
 description: "ElectricSQL is a natural fit for multi tenant applications"
 pubDate: 2025-09-24
 tags:
-  [
-    "electricsql",
-    "postrgresql",
-    "postgres",
-    "tanstack",
-    "elixir",
-    "phoenix",
-    "elixir-phoenix",
-  ]
+  - electricsql
+  - postrgresql
+  - postgres
+  - tanstack
+  - elixir
+  - phoenix
+  - elixir-phoenix
+image: "/images/drim.jpg"
+imageAlt: "A view over river Drim taken on a sunset in Struga."
 ---
 
 Recently, I had an idea about an app that is a good fit for multi-tenant architecture. After an initial planning with SQLite, which is simple and fast, I've realized that at some point in time I will need to separate the storage of the database files and the compute and here things get more complex.
