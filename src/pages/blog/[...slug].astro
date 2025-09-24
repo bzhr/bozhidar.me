@@ -70,12 +70,16 @@ const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
 	}
 	.tags {
 		display: flex;
+		flex-wrap: wrap;
 		gap: 0.5rem;
 		margin-top: 1rem;
 	}
 	.tag {
 		color: var(--text-secondary);
 		font-size: 0.9rem;
+		/* Prevent tags from forcing horizontal scroll */
+		max-width: 100%;
+		overflow-wrap: anywhere;
 	}
 	.post-hero {
 		margin: 1rem 0 1.5rem;
