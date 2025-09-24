@@ -1,0 +1,44 @@
+/* Global link styling shared across pages */
+
+/* Theme-aware link color variables */
+:root {
+  /* Default link colors for light theme */
+  --link-color: #2563eb; /* blue-600 */
+  --link-hover-color: #1d4ed8; /* blue-700 */
+}
+
+[data-theme="dark"] {
+  /* Softer, lighter links for dark theme */
+  --link-color: #93c5fd; /* sky-300 */
+  --link-hover-color: #bfdbfe; /* sky-200 */
+}
+
+/* Base link styles */
+a {
+  color: var(--link-color);
+  text-decoration-color: color-mix(in oklab, var(--link-color) 50%, transparent);
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 2px;
+}
+
+a:hover {
+  color: var(--link-hover-color);
+  text-decoration-color: var(--link-hover-color);
+}
+
+/* Accent-style links used for CTAs like Read more / View all */
+.link-accent,
+.read-more,
+.view-all a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.link-accent:hover,
+.read-more:hover,
+.view-all a:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+}
+

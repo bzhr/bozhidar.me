@@ -20,7 +20,12 @@ const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
 });
 ---
 
-<Layout title={post.data.title}>
+<Layout
+  title={`${post.data.title} | Bozhidar Hristov`}
+  description={post.data.description}
+  keywords={post.data.tags}
+  type="article"
+>
 	<article class="blog-post">
 		<header>
 			<time datetime={post.data.pubDate.toISOString()}>{formattedDate}</time>

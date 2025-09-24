@@ -8,7 +8,17 @@ const posts = (await getCollection('blog')).sort(
 );
 ---
 
-<Layout title="Blog | Bozhidar's Blog">
+<Layout
+  title="Blog | Bozhidar Hristov"
+  description="All blog posts by Bozhidar Hristov on software development, technology, and endurance training."
+  keywords={[
+    'Bozhidar Hristov',
+    'blog posts',
+    'software development',
+    'technology',
+    'endurance training',
+  ]}
+>
 	<h1>Blog Posts</h1>
 	<section class="posts">
 		{posts.map(post => (

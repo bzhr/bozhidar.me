@@ -1,0 +1,373 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="About | Bozhidar Hristov"
+  description="About Bozhidar Hristov — software development, technology, endurance training, product engineering, developer experience, performance and reliability."
+  keywords={[
+    "Bozhidar Hristov",
+    "software development",
+    "electricsql",
+    "endurance training",
+    "product engineering",
+    "developer experience",
+    "performance",
+    "reliability",
+    "playwright",
+    "rag",
+  ]}
+>
+  <figure class="about-hero">
+    <button
+      class="hero-trigger"
+      aria-label="Expand image"
+      aria-haspopup="dialog"
+      aria-controls="hero-lightbox"
+    >
+      <img
+        src="/galicica_climb.JPG"
+        alt="Bozhidar climbing at Galicica (placeholder)"
+      />
+    </button>
+  </figure>
+
+  <div
+    id="hero-lightbox"
+    class="lightbox"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Galicica climb photo"
+    hidden
+  >
+    <button class="close" aria-label="Close">×</button>
+    <img
+      src="/galicica_climb.JPG"
+      alt="Bozhidar climbing at Galicica (placeholder) expanded"
+    />
+  </div>
+
+  <section class="intro">
+    <h1>About me</h1>
+    <p>
+      I'm Bozhidar Hristov, a software developer currently living in North
+      Macedonia. My experience is mostly in backend and data roles, but I have
+      wide interests. For example, this <a
+        class="link-accent"
+        href="https://github.com/bzhr/bozhidar.me"
+        target="_blank"
+        rel="noopener noreferrer">website</a
+      > is built with Astro and open sourced on my Github <a
+        class="link-accent"
+        href="https://github.com/bzhr"
+        target="_blank"
+        rel="noopener noreferrer">profile.</a
+      >
+      <p class="meta">
+        <a
+          class="link-accent"
+          href="https://drive.google.com/file/d/1mEj4WRCrhB0q74tS_En9OkJUL3eEYNZX/view?usp=drive_link"
+          target="_blank"
+          rel="noopener noreferrer">View my CV (PDF) →</a
+        >
+        <span class="spacer">·</span>
+        Contact: <a href="mailto:bozidar.hristov@gmail.com"
+          >bozidar.hristov@gmail.com</a
+        >
+      </p>
+      <p>
+        Recently I've been working on RAG pipelines, Playwright automations,
+        data pipelines, RAG evaluations to name a few projects. My current
+        interests also include local first technologies, I am evaluating
+        ElectricSQL and Tanstack for a personal multi-tenant project and I would
+        like to share my learnings on this blog.
+      </p>
+      <p>
+        Another interesting project I've worked on recently was developing bots
+        that can bypass Cloudflare bot protections. Today in the age of AI, many
+        companies depend on good data and they use bots to collect this data.
+        However, many companies struggle to successfully pass bot protections.
+        If you need such technology, feel free to contact me.
+      </p>
+      <p>
+        Furthermore, you can find me on the socials by clicking the links below.
+        My unfiltered opinions on X, my daily life on Instagram, my music
+        playlists on SoundCloud, my training on Strava and last, but not least
+        my code on Github.
+      </p>
+    </p>
+
+    <section class="about-text">
+      <h2>Why I Started This Blog</h2>
+      <p>
+        I believe in sharing knowledge and experiences. Through this blog, I aim
+        to:
+        <ul>
+          <p>1. Share my learnings in software development.</p>
+          <p>2. Document my journey.</p>
+          <p>3. Connect with like-minded individuals.</p>
+          <p>Stay tuned for more posts!</p>
+        </ul>
+      </p>
+    </section>
+
+    <section class="social">
+      <h2>Social</h2>
+      <ul class="social-links">
+        <li>
+          <a
+            href="http://x.com/boleroo/"
+            aria-label="X (Twitter)"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              class="mono"
+              src="/icons/X.svg"
+              width="24"
+              height="24"
+              alt="X logo"
+            />
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://www.instagram.com/the_ulterior/"
+            aria-label="Instagram"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src="/icons/instagram.svg"
+              width="24"
+              height="24"
+              alt="Instagram logo"
+            />
+          </a>
+        </li>
+        <li>
+          <a
+            href="http://soundcloud.com/ulterior/"
+            aria-label="SoundCloud"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              class="mono"
+              src="/icons/soundcloud.svg"
+              width="24"
+              height="24"
+              alt="SoundCloud logo"
+            />
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://www.strava.com/athletes/bozhidar_hristov"
+            aria-label="Strava"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              class="mono"
+              src="/icons/strava.svg"
+              width="24"
+              height="24"
+              alt="Strava logo"
+            />
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://github.com/bzhr"
+            aria-label="GitHub"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              class="mono"
+              src="/icons/github.svg"
+              width="24"
+              height="24"
+              alt="GitHub logo"
+            />
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>More</h2>
+      <ul class="links">
+        <li><a href="/blog">Read the blog →</a></li>
+        <li><a href="/">Back to home</a></li>
+      </ul>
+    </section>
+  </section>
+
+  <style>
+    .about-hero {
+      margin: 1rem 0 2rem;
+    }
+    .about-hero .hero-trigger {
+      border: 0;
+      padding: 0;
+      background: none;
+      cursor: zoom-in;
+      line-height: 0;
+      border-radius: 8px;
+      display: block;
+      width: 100%;
+    }
+    .about-hero .hero-trigger:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+    }
+    .about-hero img {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      object-fit: cover;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 1000;
+      cursor: zoom-out;
+    }
+    .lightbox.open {
+      display: flex;
+    }
+    .lightbox img {
+      max-width: min(98vw, 1200px);
+      max-height: 95vh;
+      width: auto;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    .lightbox .close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 36px;
+      height: 36px;
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      background: rgba(0, 0, 0, 0.25);
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      cursor: pointer;
+      backdrop-filter: blur(2px);
+    }
+    .intro {
+      margin: 2rem 0 2rem;
+    }
+    .meta {
+      color: var(--text-secondary);
+    }
+    .meta .spacer {
+      margin: 0 0.5rem;
+    }
+    .about-text {
+      margin-top: 2rem;
+    }
+    .links {
+      list-style: none;
+      padding: 0;
+      margin: 0.5rem 0 0;
+    }
+    .links li {
+      margin: 0.25rem 0;
+    }
+    .social-links {
+      list-style: none;
+      display: flex;
+      gap: 1rem;
+      padding: 0;
+      margin: 0.5rem 0 0;
+      align-items: center;
+    }
+    .social-links a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      transition:
+        background-color 0.15s ease,
+        transform 0.15s ease;
+    }
+    .social-links img {
+      display: block;
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+      transition: transform 0.15s ease;
+    }
+    .social-links a:hover img {
+      transform: scale(1.05);
+    }
+    :global([data-theme="dark"]) .social-links {
+      /* Container background so icons remain visible in dark mode */
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 12px;
+      padding: 0.25rem 0.5rem;
+    }
+    :global([data-theme="dark"]) .social-links a {
+      /* Solid light background ensures dark SVGs are visible */
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+    }
+    :global([data-theme="dark"]) .social-links a:hover {
+      background: #f3f4f6;
+    }
+    :global([data-theme="dark"]) .social-links img,
+    :global([data-theme="dark"]) .social-links img.mono {
+      /* Keep original icon colors; rely on light background for contrast */
+      filter: none;
+    }
+  </style>
+
+  <script>
+    const trigger = document.querySelector(".hero-trigger");
+    const lightbox = document.getElementById("hero-lightbox");
+    const closeBtn = lightbox?.querySelector(".close");
+    const lightboxImg = lightbox?.querySelector("img");
+
+    const openLightbox = () => {
+      lightbox?.classList.add("open");
+      lightbox?.removeAttribute("hidden");
+      document.addEventListener("keydown", onKeyDown);
+    };
+
+    const closeLightbox = () => {
+      lightbox?.classList.remove("open");
+      lightbox?.setAttribute("hidden", "");
+      document.removeEventListener("keydown", onKeyDown);
+    };
+
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") closeLightbox();
+    };
+
+    trigger?.addEventListener("click", openLightbox);
+    closeBtn?.addEventListener("click", closeLightbox);
+    lightbox?.addEventListener("click", (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+    lightboxImg?.addEventListener("click", closeLightbox);
+  </script>
+</Layout>

@@ -1,14 +1,17 @@
 ---
 import '@fontsource/inter/400.css';
 import '@fontsource/inter/700.css';
+import '../styles/links.css';
 import Header from '../components/Header.astro';
 
 interface Props {
 	title: string;
 	description?: string;
+	keywords?: string[];
+	type?: 'website' | 'article' | 'profile';
 }
 
-const { title, description = "Bozhidar's personal blog and thoughts" } = Astro.props;
+const { title, description = "Bozhidar's personal blog and thoughts", keywords = [], type = 'website' } = Astro.props;
 ---
 
 <!doctype html>
@@ -16,9 +19,19 @@ const { title, description = "Bozhidar's personal blog and thoughts" } = Astro.p
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="description" content={description} />
+		{keywords.length > 0 && (
+			<meta name="keywords" content={keywords.join(', ')} />
+		)}
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
+		<meta property="og:site_name" content="bozhidar.me" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:type" content={type} />
+		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
 		<title>{title}</title>
 	</head>
 	<body>
