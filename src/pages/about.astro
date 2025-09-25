@@ -1,5 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { Image } from "astro:assets";
+import galicica from "../assets/images/galicica_climb.JPG";
 ---
 
 <Layout
@@ -25,9 +27,12 @@ import Layout from "../layouts/Layout.astro";
       aria-haspopup="dialog"
       aria-controls="hero-lightbox"
     >
-      <img
-        src="/galicica_climb.JPG"
-        alt="Bozhidar climbing at Galicica (placeholder)"
+      <Image
+        src={galicica}
+        alt="Bozhidar climbing at Galicica"
+        widths={[640, 960, 1200, 1600]}
+        sizes="100vw"
+        loading="eager"
       />
     </button>
   </figure>
@@ -41,9 +46,12 @@ import Layout from "../layouts/Layout.astro";
     hidden
   >
     <button class="close" aria-label="Close">×</button>
-    <img
-      src="/galicica_climb.JPG"
-      alt="Bozhidar climbing at Galicica (placeholder) expanded"
+    <Image
+      src={galicica}
+      alt="Bozhidar climbing at Galicica (expanded)"
+      widths={[960, 1280, 1600, 1920]}
+      sizes="100vw"
+      loading="lazy"
     />
   </div>
 
