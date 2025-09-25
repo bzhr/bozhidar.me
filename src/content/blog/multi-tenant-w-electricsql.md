@@ -10,7 +10,7 @@ tags:
   - elixir
   - phoenix
   - elixir-phoenix
-image: "/images/drim.jpg"
+image: "../../assets/images/blog_images/drim.jpg"
 imageAlt: "A view over river Drim taken on a sunset in Struga."
 ---
 

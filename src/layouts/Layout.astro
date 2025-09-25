@@ -4,15 +4,19 @@ import '@fontsource/inter/700.css';
 import '../styles/links.css';
 import Header from '../components/Header.astro';
 
+import type { ImageMetadata } from 'astro';
+
 interface Props {
-	title: string;
-	description?: string;
-	keywords?: string[];
-	type?: 'website' | 'article' | 'profile';
-	image?: string;
+    title: string;
+    description?: string;
+    keywords?: string[];
+    type?: 'website' | 'article' | 'profile';
+    image?: string | ImageMetadata;
 }
 
-const { title, description = "Bozhidar's personal blog and thoughts", keywords = [], type = 'website', image } = Astro.props;
+const { title, description = "Bozhidar's personal blog and thoughts", keywords = [], type = 'website', image } = Astro.props as Props;
+
+const imageUrl = typeof image === 'string' ? image : image?.src;
 ---
 
 <!doctype html>
@@ -30,11 +34,11 @@ const { title, description = "Bozhidar's personal blog and thoughts", keywords =
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
 		<meta property="og:type" content={type} />
-		{image && <meta property="og:image" content={image} />}
+        {imageUrl && <meta property="og:image" content={imageUrl} />}
 		<meta name="twitter:card" content="summary" />
 		<meta name="twitter:title" content={title} />
 		<meta name="twitter:description" content={description} />
-		{image && <meta name="twitter:image" content={image} />}
+        {imageUrl && <meta name="twitter:image" content={imageUrl} />}
 		<title>{title}</title>
 	</head>
 	<body>
