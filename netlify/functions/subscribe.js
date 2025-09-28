@@ -34,6 +34,28 @@ function parseFormUrlEncoded(body) {
   return out;
 }
 
+function parseMultipart(body, contentType) {
+  // Very small multipart parser sufficient for simple text fields (no files)
+  const out = {};
+  const m = /boundary=(.+)$/i.exec(contentType || '');
+  if (!m) return out;
+  const boundary = m[1];
+  const parts = (body || '').split(`--${boundary}`);
+  for (const part of parts) {
+    // Skip preamble/epilogue
+    if (!part || part === '--' || part === '--\r\n') continue;
+    const [rawHeaders, ...rest] = part.split('\r\n\r\n');
+    if (!rawHeaders || rest.length === 0) continue;
+    const value = rest.join('\r\n\r\n').replace(/\r?\n--\s*$/, '').replace(/\r?\n$/, '');
+    const nameMatch = /name="([^"]+)"/i.exec(rawHeaders);
+    if (nameMatch) {
+      const name = nameMatch[1];
+      out[name] = value;
+    }
+  }
+  return out;
+}
+
 exports.handler = async (event) => {
   // Lightweight diagnostics endpoint: GET /.netlify/functions/subscribe
   if (event.httpMethod === 'GET') {
@@ -72,6 +94,8 @@ exports.handler = async (event) => {
       payload = JSON.parse(rawBody || '{}');
     } else if (contentType.includes('application/x-www-form-urlencoded')) {
       payload = parseFormUrlEncoded(rawBody);
+    } else if (contentType.includes('multipart/form-data')) {
+      payload = parseMultipart(rawBody, contentType);
     } else {
       // Multipart or fallback: try to parse as URL-encoded as most forms submit
       payload = parseFormUrlEncoded(rawBody);
