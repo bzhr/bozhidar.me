@@ -55,3 +55,22 @@ All commands are run from the root of the project, from a terminal:
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+
+## 📬 Newsletter Subscription (Listmonk)
+
+This site includes a newsletter subscribe form rendered on all pages and a Netlify Function that subscribes users to your Listmonk instance.
+
+- Component: `src/components/SubscribeForm.astro`
+- Function: `netlify/functions/subscribe.js`
+
+Configure these environment variables in your Netlify site settings:
+
+- `LISTMONK_URL` — e.g. `https://listmonk.bozhidar.me`
+- `LISTMONK_USERNAME` — Listmonk admin/API username
+- `LISTMONK_PASSWORD` — Listmonk admin/API password
+- `LISTMONK_LIST_ID` — Numeric ID of the target Listmonk list
+
+Notes:
+- The function posts to `POST /api/subscribers?upsert=true` with Basic Auth.
+- A simple honeypot field (`company`) is used to deter bots.
+- For a nicer UX, the form progressively enhances submission via `fetch`, but also works as a normal HTML form.

@@ -3,6 +3,7 @@ import '@fontsource/inter/400.css';
 import '@fontsource/inter/700.css';
 import '../styles/links.css';
 import Header from '../components/Header.astro';
+import SubscribeForm from '../components/SubscribeForm.astro';
 
 import type { ImageMetadata } from 'astro';
 
@@ -47,6 +48,7 @@ const imageUrl = typeof image === 'string' ? image : image?.src;
 			<slot />
 		</main>
 		<footer>
+			<SubscribeForm />
 			<p>&copy; {new Date().getFullYear()} Bozhidar. All rights reserved.</p>
 		</footer>
 	</body>
