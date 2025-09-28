@@ -5,14 +5,19 @@
 // - LISTMONK_PASSWORD
 // - LISTMONK_LIST_ID (numeric ID of the target list)
 
-const LISTMONK_URL = process.env.LISTMONK_URL;
-const LISTMONK_USERNAME = process.env.LISTMONK_USERNAME;
-const LISTMONK_PASSWORD = process.env.LISTMONK_PASSWORD;
-// Require a numeric list ID for simplicity/reliability
-const LISTMONK_LIST_ID = Number(process.env.LISTMONK_LIST_ID || '');
+function getEnv() {
+  const LISTMONK_URL = process.env.LISTMONK_URL;
+  const LISTMONK_USERNAME = process.env.LISTMONK_USERNAME;
+  const LISTMONK_PASSWORD = process.env.LISTMONK_PASSWORD;
+  const LISTMONK_API_TOKEN = (process.env.LISTMONK_API_TOKEN || process.env.LISTMONK_TOKEN || '').trim();
+  const LISTMONK_LIST_ID = Number(process.env.LISTMONK_LIST_ID || '');
+  return { LISTMONK_URL, LISTMONK_USERNAME, LISTMONK_PASSWORD, LISTMONK_API_TOKEN, LISTMONK_LIST_ID };
+}
 
-function badEnv() {
-  return !LISTMONK_URL || !LISTMONK_USERNAME || !LISTMONK_PASSWORD || !Number.isFinite(LISTMONK_LIST_ID);
+function badEnv(env) {
+  const hasToken = !!env.LISTMONK_API_TOKEN;
+  const hasBasic = !!env.LISTMONK_USERNAME && !!env.LISTMONK_PASSWORD;
+  return !env.LISTMONK_URL || !Number.isFinite(env.LISTMONK_LIST_ID) || !(hasToken || hasBasic);
 }
 
 function json(statusCode, payload) {
@@ -63,28 +68,32 @@ function parseMultipart(body, contentType) {
 }
 
 exports.handler = async (event) => {
+  const env = getEnv();
+
   // Lightweight diagnostics endpoint: GET /.netlify/functions/subscribe
   if (event.httpMethod === 'GET') {
     const flags = {
-      LISTMONK_URL: !!LISTMONK_URL,
-      LISTMONK_USERNAME: !!LISTMONK_USERNAME,
-      LISTMONK_PASSWORD: !!LISTMONK_PASSWORD,
-      LISTMONK_LIST_ID_isNumber: Number.isFinite(LISTMONK_LIST_ID),
+      LISTMONK_URL: !!env.LISTMONK_URL,
+      LISTMONK_USERNAME: !!env.LISTMONK_USERNAME,
+      LISTMONK_PASSWORD: !!env.LISTMONK_PASSWORD,
+      LISTMONK_API_TOKEN: !!env.LISTMONK_API_TOKEN,
+      LISTMONK_LIST_ID_isNumber: Number.isFinite(env.LISTMONK_LIST_ID),
     };
-    const normalized = normalizeBase(LISTMONK_URL);
-    return json(200, { ok: true, env: flags, listId: LISTMONK_LIST_ID, normalizedUrl: normalized || null });
+    const normalized = normalizeBase(env.LISTMONK_URL);
+    return json(200, { ok: true, env: flags, listId: env.LISTMONK_LIST_ID, normalizedUrl: normalized || null });
   }
   if (event.httpMethod !== 'POST') {
     return json(405, { error: 'Method not allowed' });
   }
 
-  if (badEnv()) {
+  if (badEnv(env)) {
     // Log which keys are present (no secrets)
     console.log('Subscribe env check', {
-      LISTMONK_URL: !!LISTMONK_URL,
-      LISTMONK_USERNAME: !!LISTMONK_USERNAME,
-      LISTMONK_PASSWORD: !!LISTMONK_PASSWORD,
-      LISTMONK_LIST_ID_isNumber: Number.isFinite(LISTMONK_LIST_ID),
+      LISTMONK_URL: !!env.LISTMONK_URL,
+      LISTMONK_USERNAME: !!env.LISTMONK_USERNAME,
+      LISTMONK_PASSWORD: !!env.LISTMONK_PASSWORD,
+      LISTMONK_API_TOKEN: !!env.LISTMONK_API_TOKEN,
+      LISTMONK_LIST_ID_isNumber: Number.isFinite(env.LISTMONK_LIST_ID),
       LISTMONK_LIST_ID_raw: process.env.LISTMONK_LIST_ID || null,
     });
     return json(500, { error: 'Server not configured for subscriptions.' });
@@ -124,13 +133,21 @@ exports.handler = async (event) => {
     return json(400, { error: 'Please provide a valid email address.' });
   }
 
-  const auth = Buffer.from(`${LISTMONK_USERNAME}:${LISTMONK_PASSWORD}`).toString('base64');
-  const base = normalizeBase(LISTMONK_URL);
+  function authHeaders() {
+    if (env.LISTMONK_API_TOKEN) {
+      // Use Bearer token by default for API users
+      return { 'Authorization': `Bearer ${env.LISTMONK_API_TOKEN}` };
+    }
+    const basic = Buffer.from(`${env.LISTMONK_USERNAME}:${env.LISTMONK_PASSWORD}`).toString('base64');
+    return { 'Authorization': `Basic ${basic}` };
+  }
+  const base = normalizeBase(env.LISTMONK_URL);
+  console.log('Subscribe using base', base);
 
   // Ping health for clearer diagnostics
   try {
     const health = await fetch(`${base}/api/health`, {
-      headers: { 'Authorization': `Basic ${auth}`, 'Accept': 'application/json' },
+      headers: { ...authHeaders(), 'Accept': 'application/json' },
     });
     if (!health.ok) {
       const txt = await health.text();
@@ -140,7 +157,7 @@ exports.handler = async (event) => {
     console.log('Listmonk health check error', String(e));
   }
 
-  const listId = LISTMONK_LIST_ID;
+  const listId = env.LISTMONK_LIST_ID;
 
   const body = {
     email,
@@ -156,7 +173,7 @@ exports.handler = async (event) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Basic ${auth}`,
+        ...authHeaders(),
         'Accept': 'application/json',
       },
       body: JSON.stringify(body),

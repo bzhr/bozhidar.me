@@ -66,8 +66,8 @@ This site includes a newsletter subscribe form rendered on all pages and a Netli
 Configure these environment variables in your Netlify site settings:
 
 - `LISTMONK_URL` — e.g. `https://listmonk.bozhidar.me`
-- `LISTMONK_USERNAME` — Listmonk admin/API username
-- `LISTMONK_PASSWORD` — Listmonk admin/API password
+- `LISTMONK_API_TOKEN` — API user token (preferred)
+- `LISTMONK_USERNAME` and `LISTMONK_PASSWORD` — only if not using token
 - `LISTMONK_LIST_ID` — Numeric ID of the target Listmonk list (e.g., 2).
 
 Notes:
