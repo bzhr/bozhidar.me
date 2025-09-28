@@ -8,11 +8,11 @@
 const LISTMONK_URL = process.env.LISTMONK_URL;
 const LISTMONK_USERNAME = process.env.LISTMONK_USERNAME;
 const LISTMONK_PASSWORD = process.env.LISTMONK_PASSWORD;
-// Accept numeric ID, UUID, slug, or name. We'll resolve to numeric ID at runtime.
-const LISTMONK_LIST_KEY = (process.env.LISTMONK_LIST_ID || process.env.LISTMONK_LIST || process.env.LISTMONK_LIST_UUID || '').trim();
+// Require a numeric list ID for simplicity/reliability
+const LISTMONK_LIST_ID = Number(process.env.LISTMONK_LIST_ID || '');
 
 function badEnv() {
-  return !LISTMONK_URL || !LISTMONK_USERNAME || !LISTMONK_PASSWORD || !LISTMONK_LIST_KEY;
+  return !LISTMONK_URL || !LISTMONK_USERNAME || !LISTMONK_PASSWORD || !Number.isFinite(LISTMONK_LIST_ID);
 }
 
 function json(statusCode, payload) {
@@ -21,6 +21,12 @@ function json(statusCode, payload) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   };
+}
+
+function normalizeBase(url) {
+  let u = (url || '').trim();
+  if (!/^https?:\/\//i.test(u) && u) u = `https://${u}`;
+  return u.replace(/\/$/, '');
 }
 
 function isEmail(value) {
@@ -63,9 +69,10 @@ exports.handler = async (event) => {
       LISTMONK_URL: !!LISTMONK_URL,
       LISTMONK_USERNAME: !!LISTMONK_USERNAME,
       LISTMONK_PASSWORD: !!LISTMONK_PASSWORD,
-      LISTMONK_LIST_KEY_present: !!LISTMONK_LIST_KEY,
+      LISTMONK_LIST_ID_isNumber: Number.isFinite(LISTMONK_LIST_ID),
     };
-    return json(200, { ok: true, env: flags, listKey: LISTMONK_LIST_KEY || null });
+    const normalized = normalizeBase(LISTMONK_URL);
+    return json(200, { ok: true, env: flags, listId: LISTMONK_LIST_ID, normalizedUrl: normalized || null });
   }
   if (event.httpMethod !== 'POST') {
     return json(405, { error: 'Method not allowed' });
@@ -77,7 +84,7 @@ exports.handler = async (event) => {
       LISTMONK_URL: !!LISTMONK_URL,
       LISTMONK_USERNAME: !!LISTMONK_USERNAME,
       LISTMONK_PASSWORD: !!LISTMONK_PASSWORD,
-      LISTMONK_LIST_KEY_present: !!LISTMONK_LIST_KEY,
+      LISTMONK_LIST_ID_isNumber: Number.isFinite(LISTMONK_LIST_ID),
       LISTMONK_LIST_ID_raw: process.env.LISTMONK_LIST_ID || null,
     });
     return json(500, { error: 'Server not configured for subscriptions.' });
@@ -118,33 +125,22 @@ exports.handler = async (event) => {
   }
 
   const auth = Buffer.from(`${LISTMONK_USERNAME}:${LISTMONK_PASSWORD}`).toString('base64');
+  const base = normalizeBase(LISTMONK_URL);
 
-  // Resolve list ID (supports numeric ID, UUID, slug, or name)
-  async function resolveListId() {
-    if (/^\d+$/.test(LISTMONK_LIST_KEY)) return Number(LISTMONK_LIST_KEY);
-    try {
-      const res = await fetch(`${LISTMONK_URL.replace(/\/$/, '')}/api/lists?per_page=1000`, {
-        headers: { 'Authorization': `Basic ${auth}` },
-      });
-      const json = await res.json().catch(() => ({}));
-      const results = json?.data?.results || json?.data || json?.results || [];
-      const key = LISTMONK_LIST_KEY.toLowerCase();
-      const found = Array.isArray(results) ? results.find((l) => {
-        const uuid = (l.uuid || '').toString().toLowerCase();
-        const slug = (l.slug || '').toString().toLowerCase();
-        const name = (l.name || '').toString().toLowerCase();
-        return uuid === key || slug === key || name === key;
-      }) : null;
-      return found?.id ?? null;
-    } catch (e) {
-      return null;
+  // Ping health for clearer diagnostics
+  try {
+    const health = await fetch(`${base}/api/health`, {
+      headers: { 'Authorization': `Basic ${auth}`, 'Accept': 'application/json' },
+    });
+    if (!health.ok) {
+      const txt = await health.text();
+      console.log('Listmonk health check failed', { status: health.status, body: txt.slice(0, 200) });
     }
+  } catch (e) {
+    console.log('Listmonk health check error', String(e));
   }
 
-  const listId = await resolveListId();
-  if (!listId) {
-    return json(500, { error: 'Subscription list not found. Check LISTMONK_LIST_ID/UUID/slug.' });
-  }
+  const listId = LISTMONK_LIST_ID;
 
   const body = {
     email,
@@ -156,11 +152,12 @@ exports.handler = async (event) => {
   };
 
   try {
-    const res = await fetch(`${LISTMONK_URL.replace(/\/$/, '')}/api/subscribers?upsert=true`, {
+    const res = await fetch(`${base}/api/subscribers?upsert=true`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Basic ${auth}`,
+        'Accept': 'application/json',
       },
       body: JSON.stringify(body),
     });
@@ -174,6 +171,7 @@ exports.handler = async (event) => {
 
     return json(200, { success: true, message: 'Thanks! Please check your inbox.' });
   } catch (err) {
-    return json(500, { error: 'Unable to reach subscription service.' });
+    console.log('Subscribe request error', String(err));
+    return json(500, { error: 'Unable to reach subscription service. Check LISTMONK_URL (must include https://) and network reachability.' });
   }
 };

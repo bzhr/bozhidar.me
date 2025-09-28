@@ -52,19 +52,16 @@ const { title = 'Subscribe to the newsletter', description = "Get new posts and 
       btn.disabled = true;
 
       try {
-        // Prefer URL-encoded body to avoid multipart parsing in the function
+        // Send JSON for simplicity and consistency
         const formData = new FormData(form);
-        const params = new URLSearchParams();
-        for (const [k, v] of formData.entries()) {
-          params.append(k, typeof v === 'string' ? v : '');
-        }
+        const payload = Object.fromEntries(Array.from(formData.entries()).map(([k, v]) => [k, typeof v === 'string' ? v : ''])) as Record<string, string>;
         const res = await fetch(form.action, {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+            'Content-Type': 'application/json',
           },
-          body: params.toString(),
+          body: JSON.stringify(payload),
         });
         const data = await res.json().catch(() => ({}));
         if (res.ok && data?.success) {
