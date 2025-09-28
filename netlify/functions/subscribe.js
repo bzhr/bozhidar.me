@@ -10,8 +10,9 @@ function getEnv() {
   const LISTMONK_USERNAME = process.env.LISTMONK_USERNAME;
   const LISTMONK_PASSWORD = process.env.LISTMONK_PASSWORD;
   const LISTMONK_API_TOKEN = (process.env.LISTMONK_API_TOKEN || process.env.LISTMONK_TOKEN || '').trim();
+  const LISTMONK_API_USER = (process.env.LISTMONK_API_USER || process.env.LISTMONK_API_USERNAME || '').trim();
   const LISTMONK_LIST_ID = Number(process.env.LISTMONK_LIST_ID || '');
-  return { LISTMONK_URL, LISTMONK_USERNAME, LISTMONK_PASSWORD, LISTMONK_API_TOKEN, LISTMONK_LIST_ID };
+  return { LISTMONK_URL, LISTMONK_USERNAME, LISTMONK_PASSWORD, LISTMONK_API_TOKEN, LISTMONK_API_USER, LISTMONK_LIST_ID };
 }
 
 function badEnv(env) {
@@ -77,6 +78,8 @@ exports.handler = async (event) => {
       LISTMONK_USERNAME: !!env.LISTMONK_USERNAME,
       LISTMONK_PASSWORD: !!env.LISTMONK_PASSWORD,
       LISTMONK_API_TOKEN: !!env.LISTMONK_API_TOKEN,
+      LISTMONK_API_USER: !!env.LISTMONK_API_USER,
+      LISTMONK_API_TOKEN_hasColon: env.LISTMONK_API_TOKEN ? env.LISTMONK_API_TOKEN.includes(':') : false,
       LISTMONK_LIST_ID_isNumber: Number.isFinite(env.LISTMONK_LIST_ID),
     };
     const normalized = normalizeBase(env.LISTMONK_URL);
@@ -135,8 +138,15 @@ exports.handler = async (event) => {
 
   function authHeaders() {
     if (env.LISTMONK_API_TOKEN) {
-      // Use Bearer token by default for API users
-      return { 'Authorization': `Bearer ${env.LISTMONK_API_TOKEN}` };
+      // Listmonk expects: Authorization: token api_user:token
+      const combined = env.LISTMONK_API_TOKEN.includes(':')
+        ? env.LISTMONK_API_TOKEN
+        : (env.LISTMONK_API_USER ? `${env.LISTMONK_API_USER}:${env.LISTMONK_API_TOKEN}` : null);
+      if (!combined) {
+        // Fall back to basic check failure: missing API user to combine token
+        console.log('Missing LISTMONK_API_USER to combine with token');
+      }
+      return { 'Authorization': `token ${combined}` };
     }
     const basic = Buffer.from(`${env.LISTMONK_USERNAME}:${env.LISTMONK_PASSWORD}`).toString('base64');
     return { 'Authorization': `Basic ${basic}` };
