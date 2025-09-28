@@ -68,7 +68,7 @@ Configure these environment variables in your Netlify site settings:
 - `LISTMONK_URL` — e.g. `https://listmonk.bozhidar.me`
 - `LISTMONK_USERNAME` — Listmonk admin/API username
 - `LISTMONK_PASSWORD` — Listmonk admin/API password
-- `LISTMONK_LIST_ID` — Numeric ID of the target Listmonk list
+- `LISTMONK_LIST_ID` — ID of the target Listmonk list. Can be the numeric ID, UUID, or slug/name; the function resolves it to a numeric ID at runtime.
 
 Notes:
 - The function posts to `POST /api/subscribers?upsert=true` with Basic Auth.

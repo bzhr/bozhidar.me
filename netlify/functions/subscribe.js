@@ -8,10 +8,11 @@
 const LISTMONK_URL = process.env.LISTMONK_URL;
 const LISTMONK_USERNAME = process.env.LISTMONK_USERNAME;
 const LISTMONK_PASSWORD = process.env.LISTMONK_PASSWORD;
-const LISTMONK_LIST_ID = Number(process.env.LISTMONK_LIST_ID || '');
+// Accept numeric ID, UUID, slug, or name. We'll resolve to numeric ID at runtime.
+const LISTMONK_LIST_KEY = (process.env.LISTMONK_LIST_ID || process.env.LISTMONK_LIST || process.env.LISTMONK_LIST_UUID || '').trim();
 
 function badEnv() {
-  return !LISTMONK_URL || !LISTMONK_USERNAME || !LISTMONK_PASSWORD || !Number.isFinite(LISTMONK_LIST_ID);
+  return !LISTMONK_URL || !LISTMONK_USERNAME || !LISTMONK_PASSWORD || !LISTMONK_LIST_KEY;
 }
 
 function json(statusCode, payload) {
@@ -40,9 +41,9 @@ exports.handler = async (event) => {
       LISTMONK_URL: !!LISTMONK_URL,
       LISTMONK_USERNAME: !!LISTMONK_USERNAME,
       LISTMONK_PASSWORD: !!LISTMONK_PASSWORD,
-      LISTMONK_LIST_ID_isNumber: Number.isFinite(LISTMONK_LIST_ID),
+      LISTMONK_LIST_KEY_present: !!LISTMONK_LIST_KEY,
     };
-    return json(200, { ok: true, env: flags });
+    return json(200, { ok: true, env: flags, listKey: LISTMONK_LIST_KEY || null });
   }
   if (event.httpMethod !== 'POST') {
     return json(405, { error: 'Method not allowed' });
@@ -54,8 +55,8 @@ exports.handler = async (event) => {
       LISTMONK_URL: !!LISTMONK_URL,
       LISTMONK_USERNAME: !!LISTMONK_USERNAME,
       LISTMONK_PASSWORD: !!LISTMONK_PASSWORD,
-      LISTMONK_LIST_ID_isNumber: Number.isFinite(LISTMONK_LIST_ID),
-      LISTMONK_LIST_ID_rawType: typeof process.env.LISTMONK_LIST_ID,
+      LISTMONK_LIST_KEY_present: !!LISTMONK_LIST_KEY,
+      LISTMONK_LIST_ID_raw: process.env.LISTMONK_LIST_ID || null,
     });
     return json(500, { error: 'Server not configured for subscriptions.' });
   }
@@ -94,11 +95,38 @@ exports.handler = async (event) => {
 
   const auth = Buffer.from(`${LISTMONK_USERNAME}:${LISTMONK_PASSWORD}`).toString('base64');
 
+  // Resolve list ID (supports numeric ID, UUID, slug, or name)
+  async function resolveListId() {
+    if (/^\d+$/.test(LISTMONK_LIST_KEY)) return Number(LISTMONK_LIST_KEY);
+    try {
+      const res = await fetch(`${LISTMONK_URL.replace(/\/$/, '')}/api/lists?per_page=1000`, {
+        headers: { 'Authorization': `Basic ${auth}` },
+      });
+      const json = await res.json().catch(() => ({}));
+      const results = json?.data?.results || json?.data || json?.results || [];
+      const key = LISTMONK_LIST_KEY.toLowerCase();
+      const found = Array.isArray(results) ? results.find((l) => {
+        const uuid = (l.uuid || '').toString().toLowerCase();
+        const slug = (l.slug || '').toString().toLowerCase();
+        const name = (l.name || '').toString().toLowerCase();
+        return uuid === key || slug === key || name === key;
+      }) : null;
+      return found?.id ?? null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  const listId = await resolveListId();
+  if (!listId) {
+    return json(500, { error: 'Subscription list not found. Check LISTMONK_LIST_ID/UUID/slug.' });
+  }
+
   const body = {
     email,
     name: name || undefined,
     status: 'enabled',
-    lists: [LISTMONK_LIST_ID],
+    lists: [listId],
     // Set to true if you want to skip opt-in confirmation for verified sources
     // preconfirm_subscriptions: false,
   };
