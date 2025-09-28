@@ -34,25 +34,46 @@ function parseFormUrlEncoded(body) {
 }
 
 exports.handler = async (event) => {
+  // Lightweight diagnostics endpoint: GET /.netlify/functions/subscribe
+  if (event.httpMethod === 'GET') {
+    const flags = {
+      LISTMONK_URL: !!LISTMONK_URL,
+      LISTMONK_USERNAME: !!LISTMONK_USERNAME,
+      LISTMONK_PASSWORD: !!LISTMONK_PASSWORD,
+      LISTMONK_LIST_ID_isNumber: Number.isFinite(LISTMONK_LIST_ID),
+    };
+    return json(200, { ok: true, env: flags });
+  }
   if (event.httpMethod !== 'POST') {
     return json(405, { error: 'Method not allowed' });
   }
 
   if (badEnv()) {
+    // Log which keys are present (no secrets)
+    console.log('Subscribe env check', {
+      LISTMONK_URL: !!LISTMONK_URL,
+      LISTMONK_USERNAME: !!LISTMONK_USERNAME,
+      LISTMONK_PASSWORD: !!LISTMONK_PASSWORD,
+      LISTMONK_LIST_ID_isNumber: Number.isFinite(LISTMONK_LIST_ID),
+      LISTMONK_LIST_ID_rawType: typeof process.env.LISTMONK_LIST_ID,
+    });
     return json(500, { error: 'Server not configured for subscriptions.' });
   }
 
   // Accept either form-data, x-www-form-urlencoded, or JSON
   const contentType = (event.headers['content-type'] || event.headers['Content-Type'] || '').toLowerCase();
   let payload = {};
+  const rawBody = event.isBase64Encoded
+    ? Buffer.from(event.body || '', 'base64').toString('utf8')
+    : (event.body || '');
   try {
     if (contentType.includes('application/json')) {
-      payload = JSON.parse(event.body || '{}');
+      payload = JSON.parse(rawBody || '{}');
     } else if (contentType.includes('application/x-www-form-urlencoded')) {
-      payload = parseFormUrlEncoded(event.body);
+      payload = parseFormUrlEncoded(rawBody);
     } else {
       // Multipart or fallback: try to parse as URL-encoded as most forms submit
-      payload = parseFormUrlEncoded(event.body);
+      payload = parseFormUrlEncoded(rawBody);
     }
   } catch (_) {
     return json(400, { error: 'Invalid request body' });
@@ -104,4 +125,3 @@ exports.handler = async (event) => {
     return json(500, { error: 'Unable to reach subscription service.' });
   }
 };
-

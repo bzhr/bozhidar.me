@@ -1,0 +1,14 @@
+[build]
+  # Build inside the Astro project located in /site
+  base = "site"
+  command = "npm ci && npm run build"
+  # Publish the built static site (relative to base)
+  publish = "dist"
+
+[build.environment]
+  # Ensure a modern Node for Astro 5
+  NODE_VERSION = "22"
+
+[functions]
+  # Relative to the build base above
+  directory = "netlify/functions"
