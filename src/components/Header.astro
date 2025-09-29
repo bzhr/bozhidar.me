@@ -10,7 +10,13 @@ const navItems = [
 <header>
   <nav>
     <div class="site-title">
-      <a href="/">bozhidar.me</a>
+      <a href="/" class="home-link" aria-label="bozhidar.me home">
+        <!-- Dark-stroke logo in light mode -->
+        <img src="/favicon-dark.svg" alt="" class="logo logo--light-mode" />
+        <!-- Light logo in dark mode -->
+        <img src="/favicon.svg" alt="" class="logo logo--dark-mode" />
+        <span class="sr-only">bozhidar.me</span>
+      </a>
     </div>
     <div class="nav-container">
       <ul class="nav-links">
@@ -42,10 +48,15 @@ const navItems = [
     gap: 1.5rem;
   }
   .site-title a {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text-primary);
+    display: inline-flex;
+    align-items: center;
     text-decoration: none;
+    padding: 4px 0; /* increase tap target */
+  }
+  .site-title .logo {
+    display: block;
+    height: 48px;
+    width: auto;
   }
   .nav-links {
     display: flex;
@@ -61,5 +72,33 @@ const navItems = [
   }
   .nav-links a:hover {
     color: var(--accent);
+  }
+  /* Tweak sizes on smaller screens */
+  @media (max-width: 720px) {
+    .site-title .logo {
+      height: 42px;
+    }
+  }
+
+  /* Theme-based logo swapping (increase specificity to override .site-title .logo) */
+  .site-title .logo--dark-mode { display: none; }
+  :global([data-theme="dark"]) .site-title .logo--light-mode { display: none; }
+  :global([data-theme="dark"]) .site-title .logo--dark-mode { display: block; }
+
+  /* Fallback to prefers-color-scheme when no explicit data-theme set */
+  @media (prefers-color-scheme: dark) {
+    :global(html:not([data-theme])) .site-title .logo--light-mode { display: none; }
+    :global(html:not([data-theme])) .site-title .logo--dark-mode { display: block; }
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 </style>

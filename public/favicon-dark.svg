@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="bozhidar.me favicon transparent">
+  <defs>
+    <style>
+      .text { font: 700 280px 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif; }
+    </style>
+  </defs>
+  <!-- Transparent background -->
+  <text x="50%" y="57%" text-anchor="middle" fill="#0a2a66" class="text" letter-spacing="-8">bh</text>
+</svg>

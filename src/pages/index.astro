@@ -12,12 +12,12 @@ const posts = (await getCollection("blog"))
   title="Bozhidar Hristov | Personal Blog"
   description="The personal site and blog of Bozhidar Hristov: software development, technology, and endurance training."
   keywords={[
-    'Bozhidar Hristov',
-    'Bozhidar',
-    'personal blog',
-    'software development',
-    'technology',
-    'endurance training',
+    "Bozhidar Hristov",
+    "Bozhidar",
+    "personal blog",
+    "software development",
+    "technology",
+    "endurance training",
   ]}
 >
   <section class="intro">
@@ -52,6 +52,12 @@ const posts = (await getCollection("blog"))
 <style>
   .intro {
     margin: 3rem 0;
+  }
+  .intro-logo {
+    display: block;
+    width: 96px;
+    height: auto;
+    margin: 0 0 1rem 0;
   }
   h1 {
     font-size: 2.5rem;
