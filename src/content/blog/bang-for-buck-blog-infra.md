@@ -1,5 +1,5 @@
 ---
-title: "Getting The Best Bang For Your Buck For Your Blogging Inrfa"
+title: "Getting The Best Bang For Your Buck For Your Blogging Infra"
 description: "How I've set up multiple services for my blog, for a fraction of the cost"
 pubDate: 2025-09-29
 tags:
