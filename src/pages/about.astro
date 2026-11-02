@@ -37,13 +37,10 @@ import galicica from "../assets/images/galicica_climb.JPG";
     </button>
   </figure>
 
-  <div
-    id="hero-lightbox"
-    class="lightbox"
-    role="dialog"
-    aria-modal="true"
-    aria-label="Galicica climb photo"
-    hidden
+    <dialog
+      id="hero-lightbox"
+      class="lightbox"
+      aria-label="Galicica climb photo"
   >
     <button class="close" aria-label="Close">×</button>
     <Image
@@ -53,7 +50,7 @@ import galicica from "../assets/images/galicica_climb.JPG";
       sizes="100vw"
       loading="lazy"
     />
-  </div>
+    </dialog>
 
   <section class="intro">
     <h1>About me</h1>
@@ -71,6 +68,7 @@ import galicica from "../assets/images/galicica_climb.JPG";
         target="_blank"
         rel="noopener noreferrer">profile.</a
       >
+      </p>
       <p class="meta">
         <a
           class="link-accent"
@@ -103,20 +101,18 @@ import galicica from "../assets/images/galicica_climb.JPG";
         playlists on SoundCloud, my training on Strava and last, but not least
         my code on Github.
       </p>
-    </p>
-
     <section class="about-text">
       <h2>Why I Started This Blog</h2>
       <p>
         I believe in sharing knowledge and experiences. Through this blog, I aim
         to:
-        <ul>
-          <p>1. Share my learnings in software development.</p>
-          <p>2. Document my journey.</p>
-          <p>3. Connect with like-minded individuals.</p>
-          <p>Stay tuned for more posts!</p>
-        </ul>
       </p>
+        <ul>
+          <li>Share my learnings in software development.</li>
+          <li>Document my journey.</li>
+          <li>Connect with like-minded individuals.</li>
+        </ul>
+      <p>Stay tuned for more posts!</p>
     </section>
 
     <section class="social">
@@ -124,7 +120,7 @@ import galicica from "../assets/images/galicica_climb.JPG";
       <ul class="social-links">
         <li>
           <a
-            href="http://x.com/boleroo/"
+            href="https://x.com/boleroo/"
             aria-label="X (Twitter)"
             target="_blank"
             rel="noopener noreferrer"
@@ -155,7 +151,7 @@ import galicica from "../assets/images/galicica_climb.JPG";
         </li>
         <li>
           <a
-            href="http://soundcloud.com/ulterior/"
+            href="https://soundcloud.com/ulterior/"
             aria-label="SoundCloud"
             target="_blank"
             rel="noopener noreferrer"
@@ -242,17 +238,24 @@ import galicica from "../assets/images/galicica_climb.JPG";
     .lightbox {
       position: fixed;
       inset: 0;
+      max-width: none;
+      max-height: none;
+      width: 100vw;
+      height: 100vh;
+      margin: 0;
+      border: 0;
       display: none;
       align-items: center;
       justify-content: center;
       padding: 0;
-      background: rgba(0, 0, 0, 0.85);
+      background: transparent;
       z-index: 1000;
       cursor: zoom-out;
     }
-    .lightbox.open {
+    .lightbox[open] {
       display: flex;
     }
+    .lightbox::backdrop { background: rgba(0, 0, 0, 0.85); }
     .lightbox img {
       max-width: min(98vw, 1200px);
       max-height: 95vh;
@@ -355,27 +358,31 @@ import galicica from "../assets/images/galicica_climb.JPG";
     const closeBtn = lightbox?.querySelector(".close");
     const lightboxImg = lightbox?.querySelector("img");
 
-    const openLightbox = () => {
-      lightbox?.classList.add("open");
-      lightbox?.removeAttribute("hidden");
-      document.addEventListener("keydown", onKeyDown);
-    };
-
-    const closeLightbox = () => {
-      lightbox?.classList.remove("open");
-      lightbox?.setAttribute("hidden", "");
-      document.removeEventListener("keydown", onKeyDown);
-    };
-
-    const onKeyDown = (e) => {
-      if (e.key === "Escape") closeLightbox();
-    };
-
-    trigger?.addEventListener("click", openLightbox);
-    closeBtn?.addEventListener("click", closeLightbox);
-    lightbox?.addEventListener("click", (e) => {
-      if (e.target === lightbox) closeLightbox();
+    trigger?.addEventListener("click", () => lightbox?.showModal());
+    closeBtn?.addEventListener("click", () => lightbox?.close());
+    lightbox?.addEventListener("keydown", (e) => {
+      if (e.key !== "Tab") return;
+      const focusable = lightbox.querySelectorAll(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      );
+      if (!focusable.length) {
+        e.preventDefault();
+        lightbox.focus();
+        return;
+      }
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && (document.activeElement === first || !lightbox.contains(document.activeElement))) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && (document.activeElement === last || !lightbox.contains(document.activeElement))) {
+        e.preventDefault();
+        first.focus();
+      }
     });
-    lightboxImg?.addEventListener("click", closeLightbox);
+    lightbox?.addEventListener("click", (e) => {
+      if (e.target === lightbox) lightbox.close();
+    });
+    lightboxImg?.addEventListener("click", () => lightbox?.close());
   </script>
 </Layout>

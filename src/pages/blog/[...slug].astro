@@ -1,18 +1,18 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
 	return posts.map(post => ({
-		params: { slug: post.slug },
+		params: { slug: post.id },
 		props: { post },
 	}));
 }
 
 const { post } = Astro.props;
-const { Content } = await post.render();
+const { Content } = await render(post);
 
 const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
 	year: 'numeric',
@@ -45,7 +45,8 @@ const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
                 <Image
                     src={post.data.image}
                     alt={post.data.imageAlt ?? post.data.title}
-                    loading="lazy"
+                    loading="eager"
+                    fetchpriority="high"
                     widths={[480, 720, 1024, 1440]}
                     sizes="(max-width: 720px) 100vw, 720px"
                 />

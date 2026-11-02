@@ -3,7 +3,6 @@ import '@fontsource/inter/400.css';
 import '@fontsource/inter/700.css';
 import '../styles/links.css';
 import Header from '../components/Header.astro';
-import SubscribeForm from '../components/SubscribeForm.astro';
 
 import type { ImageMetadata } from 'astro';
 
@@ -17,7 +16,8 @@ interface Props {
 
 const { title, description = "Bozhidar's personal blog and thoughts", keywords = [], type = 'website', image } = Astro.props as Props;
 
-const imageUrl = typeof image === 'string' ? image : image?.src;
+const pageUrl = new URL(Astro.url.pathname, Astro.site);
+const imageUrl = new URL(typeof image === 'string' ? image : image?.src ?? '/images/bh_logo-optimized.png', Astro.site).href;
 ---
 
 <!doctype html>
@@ -31,17 +31,18 @@ const imageUrl = typeof image === 'string' ? image : image?.src;
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
+		<link rel="canonical" href={pageUrl.href} />
 		<meta property="og:site_name" content="bozhidar.me" />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
 		<meta property="og:type" content={type} />
-        {imageUrl && <meta property="og:image" content={imageUrl} />}
-		<meta name="twitter:card" content="summary" />
+		<meta property="og:url" content={pageUrl.href} />
+		<meta property="og:image" content={imageUrl} />
+		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content={title} />
 		<meta name="twitter:description" content={description} />
-        {imageUrl && <meta name="twitter:image" content={imageUrl} />}
+		<meta name="twitter:image" content={imageUrl} />
 		<title>{title}</title>
-		<script defer data-domain="bozhidar.me" src="https://plausible.bozhidar.me/js/script.js"></script>
 	</head>
 	<body>
 		<Header />
@@ -49,7 +50,6 @@ const imageUrl = typeof image === 'string' ? image : image?.src;
 			<slot />
 		</main>
 		<footer>
-			<SubscribeForm />
 			<p>&copy; {new Date().getFullYear()} Bozhidar. All rights reserved.</p>
 		</footer>
 	</body>
