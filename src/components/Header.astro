@@ -3,6 +3,7 @@ import ThemeToggle from "./ThemeToggle.astro";
 
 const navItems = [
   { text: "Blog", href: "/blog" },
+  { text: "CV", href: "/cv" },
   { text: "About", href: "/about" },
 ];
 ---
@@ -72,6 +73,11 @@ const navItems = [
   }
   .nav-links a:hover {
     color: var(--accent);
+  }
+  @media (max-width: 380px) {
+    .nav-container { gap: .65rem; }
+    .nav-links { gap: .7rem; }
+    .site-title .logo { height: 36px; }
   }
   /* Tweak sizes on smaller screens */
   @media (max-width: 720px) {

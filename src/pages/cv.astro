@@ -1,0 +1,145 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="CV | Bozhidar Hristov"
+  description="Curriculum vitae of Bozhidar Hristov: technical leadership, full-stack development and data engineering."
+  keywords={["Bozhidar Hristov", "CV", "Tech Lead", "Full-Stack Engineer", "Data Engineer"]}
+>
+  <article class="cv">
+    <header class="cv-header">
+      <p class="eyebrow">Curriculum vitae</p>
+      <h1>Bozhidar Hristov</h1>
+      <p class="role">Tech Lead · Full-Stack and Data Engineer</p>
+      <ul class="contact" aria-label="Contact details">
+        <li>Skopje, North Macedonia · CET</li>
+        <li><a href="mailto:bozidar.hristov@gmail.com">bozidar.hristov@gmail.com</a></li>
+        <li><a href="https://github.com/bzhr">GitHub</a></li>
+        <li><a href="https://linkedin.com/in/bozhidar-hristov/">LinkedIn</a></li>
+        <li><a href="https://drive.google.com/file/d/1VXvnSmu8CZJ_SUrIDzWcGrt4hY6Kt1Dz/view?usp=sharing" target="_blank" rel="noopener noreferrer">View CV (PDF)</a></li>
+      </ul>
+    </header>
+
+    <section class="summary" aria-labelledby="summary-heading">
+      <h2 id="summary-heading">Profile</h2>
+      <p>Tech lead and full-stack engineer with professional experience since 2015, primarily in startups. I lead multidisciplinary teams and design production systems across backend, frontend, data, AI and cloud infrastructure, with a focus on reliability, developer velocity and measurable product outcomes.</p>
+      <p>My objective is to build and lead high-impact, distributed software products as a remote technology leader.</p>
+    </section>
+
+    <section aria-labelledby="experience-heading">
+      <h2 id="experience-heading">Work experience</h2>
+      <div class="experience-list">
+        <article class="entry">
+          <div class="entry-heading"><div><h3>Tech Lead</h3><p class="company">HeartStamp <span>(US)</span></p></div><time>Dec 2025 – Present</time></div>
+          <p>HeartStamp is an AI-powered greeting-card platform for creating, personalizing and sending printed and digital cards. I lead a cross-functional engineering team of approximately eight developers and own technical direction across the product stack.</p>
+          <ul>
+            <li>Architected a distributed bulk card-creation pipeline spanning FastAPI backend, orchestration and inference services, using Redis and Celery for fair concurrency, idempotent jobs, cancellation and failure recovery, with WebSockets for real-time admin progress.</li>
+            <li>Built advanced FastAPI APIs and LangGraph workflows, including semantic search and RAG capabilities with multimodal embeddings, PostgreSQL/PGVector, hybrid retrieval, evaluation tooling and safe, feature-gated data backfills.</li>
+            <li>Led Next.js architecture for high-traffic storefront and product experiences, introducing ISR/SSR, server-side caching and prefetching, plus technical SEO through dynamic metadata, canonical URLs, sitemaps and environment-aware robots rules.</li>
+            <li>Designed the backend and WebKit bridge architecture for the iOS app, sharing authenticated editor and digital-card experiences through native WebViews; implemented StoreKit purchase verification and order flows alongside Stripe, Apple Pay and Google Pay integrations.</li>
+            <li>Owned containerized delivery across Docker and AWS ECS/ECR/S3, and evolved GitHub Actions CI/CD with multi-environment deployments, database migration gates, integration/E2E testing, observability and post-deploy checks.</li>
+            <li>Established engineering practices for a growing team, including architecture reviews, code quality and security controls, RBAC, feature flags, release processes and operational ownership as the product moved from stealth to public launch.</li>
+          </ul>
+        </article>
+        <article class="entry">
+          <div class="entry-heading"><div><h3>Data Engineering</h3><p class="company">Valuer.ai <span>(Denmark)</span></p></div><time>May 2022 – Jul 2025</time></div>
+          <p>Senior Data Engineer for Valuer's AI-driven business research platform. Built Playwright-based scraping and automation, large-scale MongoDB document pipelines, and multimodal RAG systems with LlamaIndex. Worked across vector databases, text and visual embeddings, OCR/PDF mining, model evaluation and prompt optimization.</p>
+        </article>
+        <article class="entry">
+          <div class="entry-heading"><div><h3>Full Stack Developer</h3><p class="company">Watcherr (Tequinity) <span>(Belgium)</span></p></div><time>Nov 2020 – May 2022</time></div>
+          <p>Built and maintained an IoT platform delivering smartwatches and alarm systems to institutional care clients. Developed scalable Python/Flask APIs and AWS Lambda services, while contributing across React, Next.js and React Native applications. Stack included PostgreSQL, SQLAlchemy, GraphQL, MobX, MyPy, D3.js and AWS.</p>
+        </article>
+        <article class="entry">
+          <div class="entry-heading"><div><h3>Backend Developer</h3><p class="company">Upbeat</p></div><time>2018–2020</time></div>
+          <p>Lead Backend Developer at Upbeat (findmusic.ai) — designed and maintained a Django REST API that powers a social music discovery platform focused on up-voting and sharing tracks. Oversaw the entire backend development lifecycle from inception, including Spotify integration, Firebase authentication, and Heroku deployment. Collaborated on the Angular frontend and PostgreSQL database. Supported the launch of web and mobile applications and growth to 4,000+ users.</p>
+        </article>
+        <article class="entry">
+          <div class="entry-heading"><div><h3>Data Engineering</h3><p class="company">MotabaHQ <span>(Saudi Arabia)</span></p></div><time>2019</time></div>
+          <p>Freelance development to centralize client data in BigQuery and provide a dashboard solution. Services were auto-scalable through Kubernetes. Used GCP Cloud Composer for Airflow and custom Helm charts for other services. Technologies: GCP, BigQuery, PySpark, Apache Airflow, Cloud Composer, Kubernetes, Helm and Apache Superset.</p>
+        </article>
+        <article class="entry">
+          <div class="entry-heading"><div><h3>Data Scientist/ML Engineer</h3><p class="company">Solid <span>(Singapore)</span></p></div><time>2017–2018</time></div>
+          <p>Designed and implemented a full-stack machine-learning framework for algorithmic trading, covering the pipeline from data ingestion to live predictions. Led development of systems aggregating real-time news from articles and Twitter. Used Python, scikit-learn and advanced time-series models to engineer and train predictive ensembles. Built a custom backtesting engine with performance dashboards and supported live execution on Oanda.</p>
+        </article>
+        <article class="entry">
+          <div class="entry-heading"><div><h3>Data Researcher</h3><p class="company">John Snow Labs</p></div><time>2016</time></div>
+          <p>Sourced, cleaned, structured and organized high-quality datasets tailored to client needs. Researched and evaluated new data sources, ensuring accuracy, completeness and relevance for downstream analytics and machine-learning applications.</p>
+        </article>
+        <article class="entry">
+          <div class="entry-heading"><div><h3>Web Analytics</h3><p class="company">Proxy</p></div><time>2014–2016</time></div>
+          <p>Built a Python reporting system integrating Piwik and Google Analytics APIs, generating scheduled PDF and email reports with custom D3.js visualizations. The data supported recommendation systems, A/B testing and ad targeting; stack included Flask, Django, SQL and web scraping.</p>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="skills-heading">
+      <h2 id="skills-heading">Skills</h2>
+      <dl class="skills">
+        <div><dt>Python</dt><dd>Django, Flask, FastAPI, Pydantic, BeautifulSoup, Playwright, SQLAlchemy, PySpark, PyTorch, scikit-learn, Pandas</dd></div>
+        <div><dt>Data engineering</dt><dd>Spark, Airflow, Apache Iceberg, Apache Superset, Dagster, SQL, DuckDB, dbt</dd></div>
+        <div><dt>AI</dt><dd>LlamaIndex, LangGraph, LangChain, PGVector, Qdrant, Weaviate, embeddings, multimodal RAG, chunking, reranking, model evaluation, MLflow, DVC, DSPy, Docling, Tesseract</dd></div>
+        <div><dt>JavaScript</dt><dd>React.js, Next.js, TypeScript, GraphQL, Apollo, Astro, React Native, MobX, CSS-in-JS, Node.js, D3.js</dd></div>
+        <div><dt>Databases</dt><dd>PostgreSQL, PGVector, MySQL, MongoDB, BigQuery, Redis, RabbitMQ</dd></div>
+        <div><dt>Cloud</dt><dd>AWS, Google Cloud, Azure, Heroku, DigitalOcean</dd></div>
+        <div><dt>DevOps</dt><dd>Linux, Docker, Kubernetes, Terraform, GitHub Actions, Helm, NGINX</dd></div>
+        <div><dt>Data / ML</dt><dd>Time-series analysis, machine learning, deep learning, NLP, data visualization, topic modeling</dd></div>
+        <div><dt>Languages</dt><dd>Macedonian (Native), English (Fluent), German (A1.2, certified)</dd></div>
+      </dl>
+    </section>
+
+    <section aria-labelledby="education-heading">
+      <h2 id="education-heading">Education</h2>
+      <div class="entry">
+        <div class="entry-heading"><div><h3>MSc. Master in Bank and Financial Management</h3><p class="company">University of Ljubljana</p></div><time>2010–2015</time></div>
+        <p>EQUIS accreditation. Courses: Corporate Valuation, Financial Statement Analysis, Financial Institutions and Risk Management, Statistics and Research Methods. Thesis: The decline of safe assets throughout the world and its implications.</p>
+      </div>
+      <div class="entry">
+        <div class="entry-heading"><div><h3>Erasmus Exchange</h3><p class="company">University of Zurich</p></div><time>2012</time></div>
+        <p>Quantitative Finance courses: Financial Time Series, Risk and Finance Lab, Quantitative Finance, Asset Management, Real Estate Finance, Research Seminar in Finance and Commodities Trading.</p>
+      </div>
+      <div class="entry">
+        <div class="entry-heading"><div><h3>BA. Business Administration</h3><p class="company">South East European University</p></div><time>2006–2010</time></div>
+        <p>Studied economics and Albanian in a multicultural university environment.</p>
+      </div>
+    </section>
+  </article>
+</Layout>
+
+<style>
+  .cv { --cv-line: var(--border-color); }
+  .cv-header { padding-bottom: 1.6rem; border-bottom: 1px solid var(--cv-line); }
+  .eyebrow { margin: 0; color: var(--accent); font-size: .76rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+  .cv h1 { margin: .35rem 0 .2rem; font-size: clamp(2.15rem, 7vw, 3rem); letter-spacing: -.045em; }
+  .role { margin: 0; color: var(--text-secondary); font-size: 1.08rem; }
+  .contact { display: flex; flex-wrap: wrap; gap: .35rem 1.1rem; list-style: none; margin: 1rem 0 0; padding: 0; color: var(--text-secondary); font-size: .91rem; }
+  .cv section { margin-top: 2rem; }
+  .cv h2 { margin: 0 0 1rem; padding-bottom: .5rem; border-bottom: 1px solid var(--cv-line); font-size: 1.2rem; }
+  .cv p { margin: .45rem 0; }
+  .summary p { max-width: 68ch; }
+  .entry { margin: 0 0 1.65rem; break-inside: avoid; }
+  .entry-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+  .entry h3 { margin: 0; font-size: 1.05rem; }
+  .entry time { flex: 0 0 auto; color: var(--text-secondary); font-size: .86rem; font-variant-numeric: tabular-nums; }
+  .company { color: var(--text-secondary); }
+  .entry ul { margin: .65rem 0 0; padding-left: 1.25rem; }
+  .entry li { padding-left: .15rem; margin: .38rem 0; }
+  .skills { margin: 0; }
+  .skills div { display: grid; grid-template-columns: 9.5rem 1fr; gap: .3rem 1rem; padding: .5rem 0; border-bottom: 1px solid var(--cv-line); }
+  .skills div:last-child { border-bottom: 0; }
+  .skills dt { font-weight: 700; }
+  .skills dd { margin: 0; color: var(--text-secondary); }
+  @media (max-width: 520px) {
+    .entry-heading { align-items: flex-start; flex-direction: column; gap: .1rem; }
+    .skills div { grid-template-columns: 1fr; gap: .1rem; }
+    .contact { gap: .35rem .8rem; }
+  }
+  @media print {
+    .cv-header { border-color: #bbb; }
+    .cv section { margin-top: 1.3rem; }
+    .cv h2 { border-color: #bbb; }
+    .entry { margin-bottom: 1rem; }
+    .cv a { color: inherit; text-decoration: none; }
+    .cv a[href^="mailto:"]::after, .cv a[href*="github.com"]::after, .cv a[href*="linkedin.com"]::after { content: " (" attr(href) ")"; font-size: .85em; }
+  }
+</style>

@@ -1,6 +1,27 @@
 # bozhidar.me
 Home of my personal web site. 
 
+## Run locally
+
+Run these commands from the `site/` directory using Node.js 24:
+
+```sh
+nvm use
+npm ci
+npm run dev
+```
+
+`nvm use` reads `.nvmrc`; if you do not use nvm, select Node.js 24 with your preferred version manager instead. Open the address printed in the terminal (normally `http://localhost:4321`). The CV page is at `/cv/`, and edits reload automatically. Press `Ctrl+C` to stop the server.
+
+To build and preview the production site:
+
+```sh
+npm run build
+npm run preview
+```
+
+The sitemap is generated automatically during the production build. Netlify is not required to run the current static pages locally.
+
 # Astro Starter Kit: Basics
 
 ```sh
@@ -58,7 +79,7 @@ Feel free to check [our documentation](https://docs.astro.build) or jump into ou
 
 ## 📬 Newsletter Subscription (Listmonk)
 
-This site includes a newsletter subscribe form rendered on all pages and a Netlify Function that subscribes users to your Listmonk instance.
+The newsletter form and Netlify Function source are retained for future use, but the form is not rendered on the site. The analytics script has also been removed. No newsletter or analytics service configuration is needed for local development.
 
 - Component: `src/components/SubscribeForm.astro`
 - Function: `netlify/functions/subscribe.js`
