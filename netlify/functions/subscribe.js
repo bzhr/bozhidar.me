@@ -68,7 +68,7 @@ function parseMultipart(body, contentType) {
   return out;
 }
 
-exports.handler = async (event) => {
+export const handler = async (event) => {
   const env = getEnv();
 
   // Lightweight diagnostics endpoint: GET /.netlify/functions/subscribe
