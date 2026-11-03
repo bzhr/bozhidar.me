@@ -1,5 +1,5 @@
 {
-  "defaultTemplate": "---\ntitle: \"{{title}}\"\ndescription: \"\"\npubDate: {{date}}\n---\n",
+  "defaultTemplate": "---\ntitle: \"{{title}}\"\ndescription: \"\"\npubDate: {{date}}\ndraft: true\n---\n\nWrite your post here.",
   "autoInsertProperties": true,
   "dateFormat": "YYYY-MM-DD",
   "enableCopyHeadingLink": true,
@@ -19,7 +19,7 @@
       "name": "Posts",
       "folder": "blog",
       "linkBasePath": "/blog/",
-      "template": "---\ntitle: \"{{title}}\"\ndescription: \"\"\npubDate: {{date}}\n---\n",
+      "template": "---\ntitle: \"{{title}}\"\ndescription: \"\"\npubDate: {{date}}\ndraft: true\n---\n\nWrite your post here.",
       "enabled": true,
       "creationMode": "file",
       "indexFileName": "index",
@@ -36,9 +36,9 @@
   "showMdxFilesInExplorer": true,
   "processBackgroundFileChanges": false,
   "syncDraftDate": false,
-  "draftProperty": "",
+  "draftProperty": "draft",
   "draftLogic": "true-is-draft",
-  "publishDateField": "",
+  "publishDateField": "pubDate",
   "renameOnTitleClick": false,
   "updateModifiedDate": false,
   "modifiedDateField": ""

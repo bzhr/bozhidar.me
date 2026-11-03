@@ -13,11 +13,11 @@
   "defaultOrientation": "any",
   "defaultImageSize": "large",
   "enablePropertyPaste": true,
-  "propertyLinkFormat": "obsidian",
+  "propertyLinkFormat": "path",
   "customPropertyLinkFormat": "{image-url}",
-  "defaultPropertyName": "banner",
+  "defaultPropertyName": "image",
   "defaultIconPropertyName": "icon",
-  "altTextProperty": "",
+  "altTextProperty": "imageAlt",
   "autoConvertRemoteImages": false,
   "convertOnNoteOpen": false,
   "convertOnNoteSave": false,
@@ -34,7 +34,7 @@
   "appendReferral": false,
   "banner": {
     "properties": {
-      "imageProperty": "banner",
+      "imageProperty": "image",
       "iconProperty": "icon"
     },
     "desktop": {

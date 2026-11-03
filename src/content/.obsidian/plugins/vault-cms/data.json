@@ -16,8 +16,10 @@
     "content-type-1773431208519-4qz4popde": {
       "titleProperty": "title",
       "dateProperty": "pubDate",
-      "hasDraftStatus": false,
-      "template": "---\ntitle: \"{{title}}\"\ndescription: \"\"\npubDate: {{date}}\n---\n"
+      "hasDraftStatus": true,
+      "draftProperty": "draft",
+      "draftLogic": "true-draft",
+      "template": "---\ntitle: \"{{title}}\"\ndescription: \"\"\npubDate: {{date}}\ndraft: true\n---\n\nWrite your post here."
     }
   },
   "attachmentHandlingMode": "specified-folder",
@@ -79,11 +81,11 @@
     "defaultOrientation": "any",
     "defaultImageSize": "large",
     "enablePropertyPaste": true,
-    "propertyLinkFormat": "obsidian",
+    "propertyLinkFormat": "path",
     "customPropertyLinkFormat": "{image-url}",
-    "defaultPropertyName": "banner",
+    "defaultPropertyName": "image",
     "defaultIconPropertyName": "icon",
-    "altTextProperty": "",
+    "altTextProperty": "imageAlt",
     "autoConvertRemoteImages": false,
     "convertOnNoteOpen": false,
     "convertOnNoteSave": false,
@@ -100,7 +102,7 @@
     "appendReferral": false,
     "banner": {
       "properties": {
-        "imageProperty": "banner",
+        "imageProperty": "image",
         "iconProperty": "icon"
       },
       "desktop": {
