@@ -24,3 +24,8 @@ pnpm-debug.log*
 .idea/
 
 .netlify
+
+# Vault CMS / Obsidian
+**/.obsidian/workspace.json
+**/.obsidian/workspace-mobile.json
+.ref/
