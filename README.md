@@ -98,3 +98,16 @@ Notes:
 - The function posts to `POST /api/subscribers?upsert=true` with Basic Auth.
 - A simple honeypot field (`company`) is used to deter bots.
 - For a nicer UX, the form progressively enhances submission via `fetch`, but also works as a normal HTML form.
+
+## Blog project card metadata
+
+Blog posts can optionally include a `repository` object in their frontmatter. Its required `url` must be an HTTPS GitHub owner/repository URL. Optional fields are `description`, `problem`, `contribution`, `approach`, and `outcome`; omit fields that are not supported by the post. The project card is rendered automatically on the post page when this object is present. No API or runtime service is involved.
+
+```yaml
+repository:
+  url: "https://github.com/owner/repository"
+  description: "A short, factual project summary."
+  contribution: "What the author implemented."
+  approach: "A concise description of the technical approach."
+  outcome: "The result or relevant limitations."
+```

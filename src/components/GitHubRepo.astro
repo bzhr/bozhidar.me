@@ -1,0 +1,83 @@
+---
+interface Repository {
+  url: string;
+  description?: string;
+  problem?: string;
+  contribution?: string;
+  approach?: string;
+  outcome?: string;
+}
+
+interface Props {
+  title: string;
+  repository: Repository;
+}
+
+const { title, repository } = Astro.props;
+const repositoryPath = new URL(repository.url).pathname.replace(/^\/+|\/$/g, '').replace(/\.git$/, '');
+const optionalDetails = [
+  ['Problem', repository.problem],
+  ['Contribution', repository.contribution],
+  ['Approach', repository.approach],
+  ['Outcome & notes', repository.outcome],
+].filter((detail): detail is [string, string] => Boolean(detail[1]));
+---
+
+<details class="project-card">
+  <summary>
+    <span class="chevron" aria-hidden="true">›</span>
+    <span>Project repository</span>
+  </summary>
+  <div class="project-content" aria-label={`Project repository: ${title}`}>
+    <h2>{title}</h2>
+    <p class="repo-name">{repositoryPath}</p>
+    {repository.description && <p class="description">{repository.description}</p>}
+    {optionalDetails.length > 0 && (
+      <dl class="details">
+        {optionalDetails.map(([label, text]) => (
+          <div><dt>{label}</dt><dd>{text}</dd></div>
+        ))}
+      </dl>
+    )}
+    <div class="actions">
+      <a class="repo-link" href={repository.url} target="_blank" rel="noopener noreferrer" aria-label={`View ${repositoryPath} on GitHub`}>
+        View repository <span aria-hidden="true">↗</span>
+      </a>
+      <a class="contact-link" href="mailto:bozidar.hristov@gmail.com?subject=Project%20discussion">Discuss a similar project</a>
+    </div>
+  </div>
+</details>
+
+<style>
+  .project-card {
+    margin: 0 0 1rem;
+    padding: 0;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--code-bg) 52%, var(--background));
+  }
+  .project-card summary { display: flex; align-items: center; gap: .55rem; padding: .7rem 1rem; color: var(--text-primary); font-weight: 700; cursor: pointer; list-style: none; }
+  .project-card summary::-webkit-details-marker { display: none; }
+  .project-card summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+  .chevron { display: inline-block; color: var(--accent); font-size: 1.35rem; line-height: 1; transform: rotate(0); transition: transform .16s ease; }
+  .project-card[open] .chevron { transform: rotate(90deg); }
+  .project-content { padding: 0 1rem 1rem; }
+  .project-card h2 { margin: 0; font-size: 1.25rem; }
+  .repo-name { margin: .15rem 0 .65rem; color: var(--text-secondary); font-size: .88rem; overflow-wrap: anywhere; }
+  .description { margin: .5rem 0 1rem; }
+  .details { margin: .9rem 0 1.1rem; }
+  .details div { display: grid; grid-template-columns: 7.5rem 1fr; gap: .25rem .8rem; padding: .42rem 0; border-top: 1px solid var(--border-color); }
+  .details dt { color: var(--text-secondary); font-size: .88rem; font-weight: 700; }
+  .details dd { margin: 0; }
+  .actions { display: flex; flex-wrap: wrap; gap: .65rem 1.2rem; align-items: center; }
+  .repo-link { display: inline-flex; gap: .35rem; align-items: center; padding: .45rem .75rem; border-radius: 6px; background: var(--text-primary); color: var(--background); font-weight: 700; text-decoration: none; }
+  .repo-link:hover { opacity: .86; }
+  .contact-link { color: var(--text-secondary); font-size: .92rem; }
+  .repo-link:focus-visible, .contact-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+  @media (max-width: 520px) {
+    .project-card summary { padding: .65rem .8rem; }
+    .project-content { padding: 0 .8rem .8rem; }
+    .details div { grid-template-columns: 1fr; gap: .05rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { .chevron { transition: none; } }
+</style>

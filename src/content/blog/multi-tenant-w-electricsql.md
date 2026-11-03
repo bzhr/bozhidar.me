@@ -12,6 +12,12 @@ tags:
   - elixir-phoenix
 image: "../../assets/images/blog_images/drim.jpg"
 imageAlt: "A view over river Drim taken on a sunset in Struga."
+repository:
+  url: "https://github.com/bzhr/multi_tenant_electricsql"
+  description: "An ElectricSQL starter for a multi-tenant application."
+  problem: "The project explores keeping tenant data isolated while supporting local-first app behavior."
+  contribution: "Created a starter project using Elixir Phoenix, ElectricSQL and TanStack."
+  approach: "Uses a unique Postgres schema for each residential group, with ElectricSQL for syncing."
 ---
 
 Recently, I had an idea about an app that is a good fit for multi-tenant architecture. After an initial planning with SQLite, which is simple and fast, I've realized that at some point in time I will need to separate the storage of the database files and the compute and here things get more complex.

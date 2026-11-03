@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import { Image } from 'astro:assets';
+import GitHubRepo from '../../components/GitHubRepo.astro';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
@@ -28,7 +29,7 @@ const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
   type="article"
     image={post.data.image}
 >
-	<article class="blog-post">
+	<article class:list={["blog-post", post.data.repository && "has-repository"]}>
 		<header>
 			<time datetime={post.data.pubDate.toISOString()}>{formattedDate}</time>
 			<h1>{post.data.title}</h1>
@@ -40,6 +41,7 @@ const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
 				</div>
 			)}
 		</header>
+		{post.data.repository && <GitHubRepo title={post.data.title} repository={post.data.repository} />}
         {post.data.image && (
             <figure class="post-hero">
                 <Image
@@ -59,6 +61,9 @@ const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
 <style>
 	.blog-post {
 		max-width: 100%;
+	}
+	.blog-post.has-repository > header {
+		margin-bottom: 1rem;
 	}
 	header {
 		margin-bottom: 2.5rem;

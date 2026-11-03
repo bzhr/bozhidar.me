@@ -15,6 +15,13 @@ tags:
   - docker-compose
 image: "../../assets/images/blog_images/struga_sunset.jpg"
 imageAlt: "A sunset view from Struga with a view on Ohrid Lake and mount Galicica."
+repository:
+  url: "https://github.com/bzhr/infra"
+  description: "Terraform setup for the self-hosted services described in this post."
+  problem: "Paid plans for separate hosted services would become costly as the setup grew."
+  contribution: "Built an infrastructure setup to run the services together on a DigitalOcean droplet."
+  approach: "Terraform provisions the services; Docker containers run behind Traefik, with persistent volumes."
+  outcome: "The described droplet costs $12 per month; the post also documents operational and data-storage tradeoffs."
 ---
 
 Repo [link](https://github.com/bzhr/infra).
