@@ -54,13 +54,18 @@ const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
                 />
             </figure>
         )}
-		<Content />
+		<div class="post-content">
+			<Content />
+		</div>
 	</article>
 </Layout>
 
 <style>
 	.blog-post {
 		max-width: 100%;
+	}
+	.post-content {
+		max-width: 66ch;
 	}
 	.blog-post.has-repository > header {
 		margin-bottom: 1rem;

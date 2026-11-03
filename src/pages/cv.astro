@@ -107,7 +107,7 @@ import Layout from "../layouts/Layout.astro";
 </Layout>
 
 <style>
-  .cv { --cv-line: var(--border-color); }
+  .cv { --cv-line: var(--border-color); line-height: 1.6; }
   .cv-header { padding-bottom: 1.6rem; border-bottom: 1px solid var(--cv-line); }
   .eyebrow { margin: 0; color: var(--accent); font-size: .76rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
   .cv h1 { margin: .35rem 0 .2rem; font-size: clamp(2.15rem, 7vw, 3rem); letter-spacing: -.045em; }
@@ -117,7 +117,7 @@ import Layout from "../layouts/Layout.astro";
   .cv h2 { margin: 0 0 1rem; padding-bottom: .5rem; border-bottom: 1px solid var(--cv-line); font-size: 1.2rem; }
   .cv p { margin: .45rem 0; }
   .summary p { max-width: 68ch; }
-  .entry { margin: 0 0 1.65rem; break-inside: avoid; }
+  .entry { margin: 0 0 1.25rem; break-inside: avoid; }
   .entry-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
   .entry h3 { margin: 0; font-size: 1.05rem; }
   .entry time { flex: 0 0 auto; color: var(--text-secondary); font-size: .86rem; font-variant-numeric: tabular-nums; }
