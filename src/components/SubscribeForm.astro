@@ -1,143 +1,144 @@
 ---
-interface Props {
-  title?: string;
-  description?: string;
-}
-
-const { title = 'Subscribe to the newsletter', description = "Get new posts and updates directly in your inbox." } = Astro.props as Props;
+// Public form action from Brevo's Simple HTML embed.
+const signupAction = 'https://1937dc61.sibforms.com/serve/MUIFAEj0Hmhym0gFSDAQHnBesxzvfyReXSfJn4fQ-8rr0wC0bTY7tmLvKaaUFaisTo-ibJ2vFQcdG7rxpqcxXiB0s4C5AxBjF1ARIwLdHnt9BrkdayUlEZZGNttyRhjuYaZQsr8XVylB2s0iD3BSEbgxfga4BKw9CLFS5a4xe02m-muIqpJusv8vg23KgHOFqNwHsaNC9Op_i_9p';
 ---
 
-<section class="subscribe">
-  <h2>{title}</h2>
-  <p class="desc">{description}</p>
-
-  <form class="subscribe-form" method="POST" action="/.netlify/functions/subscribe">
-    <input
-      type="email"
-      name="email"
-      placeholder="Enter your email"
-      required
-      autocomplete="email"
-      aria-label="Email address"
-    />
-    <input
-      type="text"
-      name="name"
-      placeholder="Your name (optional)"
-      autocomplete="name"
-      aria-label="Name (optional)"
-    />
-    <!-- Honeypot field to deter bots -->
-    <input type="text" name="company" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true" />
-    <button type="submit">Subscribe</button>
-    <p class="help">No spam. Unsubscribe anytime.</p>
-    <p class="msg" data-status hidden></p>
+<section class="newsletter" aria-labelledby="newsletter-heading">
+  <h2 id="newsletter-heading">Get new posts by email</h2>
+  <form action={signupAction} method="post" data-newsletter-form hidden>
+    <label for="newsletter-email">Email address</label>
+    <div class="newsletter-fields">
+      <input
+        id="newsletter-email"
+        type="email"
+        name="EMAIL"
+        autocomplete="email"
+        aria-describedby="newsletter-help"
+        required
+      />
+      <button type="submit">Subscribe</button>
+    </div>
+    <div hidden>
+      <input type="text" name="email_address_check" tabindex="-1" autocomplete="off" />
+    </div>
+    <input type="hidden" name="locale" value="en" />
+    <input type="hidden" name="html_type" value="simple" />
+    <p id="newsletter-help">Confirm by email. Unsubscribe anytime.</p>
+    <p role="status" data-newsletter-status></p>
   </form>
+  <p data-newsletter-fallback><a href={signupAction}>Subscribe to new posts</a></p>
 </section>
 
 <script>
-  // Progressive enhancement: submit via fetch for nicer UX
-  const form = document.currentScript?.previousElementSibling?.querySelector?.('form') ?? document.querySelector('.subscribe-form');
-  if (form) {
-    form.addEventListener('submit', async (e) => {
-      // Intercept only if fetch is available
-      if (!window.fetch) return;
-      e.preventDefault();
-      const msg = form.querySelector('.msg');
-      const btn = form.querySelector('button');
-      if (!msg || !btn) return;
-      msg.hidden = false;
-      msg.dataset.status = 'pending';
-      msg.textContent = 'Subscribing…';
-      btn.disabled = true;
+  const form = document.querySelector<HTMLFormElement>('[data-newsletter-form]');
+  const fallback = document.querySelector<HTMLElement>('[data-newsletter-fallback]');
+  const status = form?.querySelector<HTMLElement>('[data-newsletter-status]');
+  const button = form?.querySelector('button');
+
+  if (form && fallback && status && button) {
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const body = new URLSearchParams();
+      for (const [name, value] of new FormData(form)) {
+        if (typeof value === 'string') body.append(name, value);
+      }
+
+      button.disabled = true;
+      status.textContent = 'Submitting…';
 
       try {
-        // Send JSON for simplicity and consistency
-        const formData = new FormData(form);
-        const payload = Object.fromEntries(Array.from(formData.entries()).map(([k, v]) => [k, typeof v === 'string' ? v : ''])) as Record<string, string>;
-        const res = await fetch(form.action, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload),
-        });
-        const data = await res.json().catch(() => ({}));
-        if (res.ok && data?.success) {
-          msg.dataset.status = 'success';
-          msg.textContent = data.message || 'Thanks! Please check your inbox.';
+        const response = await fetch(form.action, { method: 'POST', body });
+        const result = await response.json();
+
+        if (response.ok && result.success === true) {
+          status.textContent = 'Check your inbox for a link to confirm your subscription.';
           form.reset();
         } else {
-          msg.dataset.status = 'error';
-          msg.textContent = data?.error || 'Subscription failed. Please try again later.';
+          status.textContent = 'Couldn’t save your signup. Please try again.';
         }
-      } catch (err) {
-        msg.dataset.status = 'error';
-        msg.textContent = 'Network error. Please try again.';
+      } catch {
+        status.textContent = 'Couldn’t verify your signup. Check your inbox or use the signup page below.';
+        fallback.hidden = false;
       } finally {
-        btn.disabled = false;
+        button.disabled = false;
       }
     });
+    form.hidden = false;
+    fallback.hidden = true;
   }
 </script>
 
 <style>
-  .subscribe {
+  .newsletter {
     margin-top: 3rem;
-    padding: 1.25rem;
-    border: 1px solid var(--border-color);
-    border-radius: 0.75rem;
-    background: var(--background);
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
   }
-  .subscribe h2 {
-    margin: 0 0 0.25rem 0;
-    font-size: 1.25rem;
+
+  h2 {
+    margin: 0 0 0.75rem;
+    font-size: 1.375rem;
   }
-  .subscribe .desc {
-    margin: 0 0 1rem 0;
-    color: var(--text-secondary);
-    font-size: 0.95rem;
+
+  label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
   }
-  .subscribe-form {
-    display: grid;
-    grid-template-columns: 1fr 1fr auto;
+
+  .newsletter-fields {
+    display: flex;
+    flex-wrap: wrap;
     gap: 0.5rem;
-    align-items: center;
+    max-width: 27rem;
   }
-  .subscribe-form input[type="email"],
-  .subscribe-form input[name="name"] {
-    padding: 0.6rem 0.75rem;
-    border: 1px solid var(--border-color);
+
+  input[type='email'], button {
+    box-sizing: border-box;
+    min-height: 2.75rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid;
     border-radius: 0.5rem;
+    font: inherit;
+  }
+
+  input[type='email'] {
+    flex: 1 1 13rem;
+    min-width: 0;
+    border-color: var(--text-secondary);
     background: var(--background);
     color: var(--text-primary);
   }
-  .subscribe-form button {
-    padding: 0.6rem 0.9rem;
-    border-radius: 0.5rem;
-    border: 1px solid transparent;
-    background: var(--accent);
-    color: white;
+
+  button {
+    border-color: currentColor;
+    background: var(--background);
+    color: var(--link-color);
     cursor: pointer;
   }
-  .subscribe-form button:disabled { opacity: 0.7; cursor: not-allowed; }
-  .subscribe-form .help {
-    grid-column: 1 / -1;
-    margin: 0.25rem 0 0;
-    color: var(--text-secondary);
-    font-size: 0.85rem;
+
+  button:hover {
+    background: var(--code-bg);
+    color: var(--link-hover-color);
   }
-  .subscribe-form .msg {
-    grid-column: 1 / -1;
-    margin: 0.25rem 0 0;
+
+  button:disabled {
+    cursor: wait;
+    opacity: 0.7;
+  }
+
+  :is(input, button):focus-visible {
+    outline: 2px solid var(--link-color);
+    outline-offset: 2px;
+  }
+
+  #newsletter-help, [data-newsletter-status], [data-newsletter-fallback] {
+    margin: 0.5rem 0 0;
+    color: var(--text-secondary);
     font-size: 0.9rem;
   }
-  .subscribe-form .msg[data-status="pending"] { color: var(--text-secondary); }
-  .subscribe-form .msg[data-status="success"] { color: #16a34a; }
-  .subscribe-form .msg[data-status="error"] { color: #dc2626; }
-  .subscribe-form .hp { position: absolute; left: -10000px; width: 1px; height: 1px; opacity: 0; }
-  @media (max-width: 720px) {
-    .subscribe-form { grid-template-columns: 1fr; }
+
+  [data-newsletter-status]:empty {
+    margin: 0;
   }
 </style>

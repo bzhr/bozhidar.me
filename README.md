@@ -77,27 +77,11 @@ All commands are run from the root of the project, from a terminal:
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
 
-## 📬 Newsletter Subscription (Listmonk)
+## 📬 Newsletter Subscription
 
-The newsletter form and Netlify Function source are retained for future use, but the form is not rendered on the site. The analytics script has also been removed. No newsletter or analytics service configuration is needed for local development.
+The blog index and each post render `src/components/SubscribeForm.astro`. It uses the public action from the **Blog Newsletter** form in Brevo (Marketing → Forms → Share → Simple HTML), so signup needs no API key or Netlify environment variables.
 
-- Component: `src/components/SubscribeForm.astro`
-- Function: `netlify/functions/subscribe.js`
-
-Configure these environment variables in your Netlify site settings:
-
-- `LISTMONK_URL` — e.g. `https://listmonk.bozhidar.me`
-- Token auth (recommended):
-  - `LISTMONK_API_USER` — API user name
-  - `LISTMONK_API_TOKEN` — token value (or set this as `api_user:token` if you prefer a single var)
-- Basic auth (fallback, if no token):
-  - `LISTMONK_USERNAME` and `LISTMONK_PASSWORD`
-- `LISTMONK_LIST_ID` — Numeric ID of the target Listmonk list (e.g., 2).
-
-Notes:
-- The function posts to `POST /api/subscribers?upsert=true` with Basic Auth.
-- A simple honeypot field (`company`) is used to deter bots.
-- For a nicer UX, the form progressively enhances submission via `fetch`, but also works as a normal HTML form.
+The form shows the result inline and links to Brevo’s hosted signup page as a fallback. Brevo sends the **bozhidar.me — newsletter confirmation** template from `contact@bozhidar.me`. Readers join the **Blog Newsletter** list after they confirm. If the form is replaced in Brevo, update the public action and check the generated fields against the new embed.
 
 ## Blog project card metadata
 

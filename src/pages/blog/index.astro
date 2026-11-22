@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import PostPreview from '../../components/PostPreview.astro';
+import SubscribeForm from '../../components/SubscribeForm.astro';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
@@ -30,6 +31,7 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
 			/>
 		))}
 	</section>
+	<SubscribeForm />
 </Layout>
 
 <style>
